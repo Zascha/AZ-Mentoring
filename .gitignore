@@ -1,0 +1,15 @@
+.vs/
+AdventureWorks.API/bin/Debug/netcoreapp3.1/AdventureWorks.API.deps.json
+AdventureWorks.API/bin/
+AdventureWorks.API/obj/
+AdventureWorks.Commin/bin/Debug/netcoreapp3.1/AdventureWorks.Common.deps.json
+AdventureWorks.Commin/bin/
+AdventureWorks.Commin/obj/
+AdventureWorks.CommomData/bin/
+AdventureWorks.CommomData/obj/
+AdventureWorks.Data/bin/
+AdventureWorks.Data/obj/
+AdventureWorks.DataAccess/bin/
+AdventureWorks.DataAccess/obj/
+AdventureWorks.DataServices/bin/
+AdventureWorks.DataServices/obj/

@@ -1,0 +1,41 @@
+﻿# For editional info visit: https://efg.loresoft.com/en/latest/
+# To run generation: efg generate -f <YML file path>
+project:
+  namespace: 'AdventureWorks.Data'
+  directory: .\AdventureWorks
+
+database:
+  #Change connectionString to the proper for your machine value
+  connectionString: 'Data Source=.;Initial Catalog=AdventureWorks2019;Integrated Security=true'
+  provider: SqlServer
+  tableNaming: Mixed
+
+data:
+  context:
+    name: 'DataContext'
+    baseClass: DbContext
+    namespace: 'AdventureWorks.Data'
+    directory: 'AdventureWorks.Data'
+    propertyNaming: Plural
+    document: true
+
+  entity:
+    namespace: 'AdventureWorks.Data.Models'
+    directory: 'AdventureWorks.Data\Models'
+    entityNaming: Preserve
+    relationshipNaming: Plural 
+    document: true
+    prefixWithSchemaName: false
+
+  mapping:
+    namespace: 'AdventureWorks.Data.Models.Mapping'
+    directory: 'AdventureWorks.Data\Models\Mapping'
+    document: false
+
+model:
+  validator:
+    generate: true
+    name: '{Model.Name}Validator'
+    baseClass: 'AbstractValidator<{Model.Name}>'
+    namespace: 'AdventureWorks.Data.Models.Validation'
+    directory: 'AdventureWorks.Data\Models\Validation'
