@@ -36,19 +36,19 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: 'Run Tests'
       inputs:
-        command: test
+        command: 'test'
         projects: '**/AdventureWorks.Tests.csproj'
-        arguments: '--no-build --configuration $(BuildConfiguration) --collect "XPlat Code coverage" -- RunConfiguration.DisableAppDomain=true'
-        testRunTitle: AdventureWorks.Tests
+        arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/"'
+        publishTestResults: true
         
     - script: 'dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.5.8'  
       displayName: 'Install ReportGenerator tool'  
       
-    - script: 'reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/eports -reporttypes:"Cobertura"'  
+    - script: 'reportgenerator -reports:$(Build.SourcesDirectory)/TestResults/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/TestResults -reporttypes:"Cobertura"'  
       displayName: 'Create Cobertura Report'
       
     - task: PublishCodeCoverageResults@1  
       displayName: 'Publish Cobertura Report'  
       inputs:  
         codeCoverageTool: Cobertura  
-        summaryFileLocation: '$(Build.SourcesDirectory)/reports/Cobertura.xml'
+        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Cobertura.xml'
