@@ -13,11 +13,11 @@ variables:
 
 stages:
 
-- stage: Build & Run Tests
-  displayName: Build Stage
+- stage: Build
+  displayName: Build
   jobs:
-  - job: Build & Run Tests
-    displayName: Build & Run Tests
+  - job: Build
+    displayName: Build
     steps:
     - task: NuGetToolInstaller@1
 
