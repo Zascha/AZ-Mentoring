@@ -32,7 +32,7 @@ stages:
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
-          **\$(BuildConfiguration)\AdventureWorks.Tests.dll
+          \**\AdventureWorks.Tests.dll
           !**\obj\**
         searchFolder: '$(System.DefaultWorkingDirectory)'
     - task: PublishBuildArtifacts@1
