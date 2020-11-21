@@ -13,16 +13,50 @@ variables:
 stages:
 
 - stage: Build_Test
-  displayName: Build_Test
+  displayName: Build
   jobs:
-  - job: Test
-    displayName: Test
+  - job: Build
+    displayName: Build
     steps:
-      - task: VSTest@2
-        inputs:
-          testSelector: 'testAssemblies'
-          testAssemblyVer2: |
-            **\$(buildConfiguration)\*test*.dll
-            !**\obj\**
-          searchFolder: '$(System.DefaultWorkingDirectory)'
-          codeCoverageEnabled: true
+    - task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      displayName: 'Build'
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+    - task: VSTest@2
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\$(BuildConfiguration)\*test*.dll
+          !**\obj\**
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'buildArtifact'
+
+#- stage: Deploy
+#  displayName: Deploy
+#  jobs:
+#  - job: Deploy
+#    displayName: Deploy
+#    steps:
+#    - task: DownloadBuildArtifacts@0
+#      inputs:
+#        buildType: 'current'
+#        downloadType: 'single'
+#        artifactName: 'buildArtifact'
+#        downloadPath: '$(Build.ArtifactStagingDirectory)'
+#    - task: AzureRmWebAppDeployment@4
+#      inputs:
+#        ConnectionType: 'AzureRM'
+#        azureSubscription: 'Visual Studio Professional(dda2a232-c1b2-433a-a1e5-1d8086dd0e30)'
+#        appType: 'webApp'
+#        WebAppName: $(webAppName)
+#        Package: '$(Build.ArtifactStagingDirectory)\**\WebApp.zip'
