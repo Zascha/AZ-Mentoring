@@ -35,12 +35,6 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'buildArtifact'
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'buildArtifact'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
 
 - stage: Deploy
   displayName: Deploy
@@ -48,6 +42,12 @@ stages:
   - job: Deploy
     displayName: Deploy
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'buildArtifact'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
