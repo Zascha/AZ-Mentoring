@@ -49,4 +49,4 @@ stages:
         azureSubscription: 'Visual Studio Professional(dda2a232-c1b2-433a-a1e5-1d8086dd0e30)'
         appType: 'webApp'
         WebAppName: $(webAppName)
-        Package: '$(Pipeline.Workspace)\**\WebApp.zip'
+        Package: '$(Build.ArtifactStagingDirectory)\**\WebApp.zip'
