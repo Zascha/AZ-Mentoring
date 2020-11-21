@@ -12,18 +12,16 @@ variables:
 
 stages:
 
-- stage: Build
+- stage: Build_Test
   displayName: Build
   jobs:
   - job: Build
     displayName: Build
     steps:
     - task: NuGetToolInstaller@1
-
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
-
     - task: VSBuild@1
       displayName: 'Build'
       inputs:
@@ -35,6 +33,18 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'buildArtifact'
+  - job: Test
+    displayName: Test
+    steps:
+      - task: VSTest@2
+        inputs:
+          testSelector: 'testAssemblies'
+          testAssemblyVer2: |
+            **\*test*.dll
+            !**\*TestAdapter.dll
+            !**\obj\**
+          searchFolder: '$(System.DefaultWorkingDirectory)'
+          codeCoverageEnabled: true
 
 - stage: Deploy
   displayName: Deploy
