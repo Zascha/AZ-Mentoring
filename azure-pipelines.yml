@@ -28,24 +28,27 @@ stages:
         solution: '$(solution)'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-    - task: VSTest@2
-      inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: |
-          **\AdventureWorks.Tests.dll
-          !**\obj\**
-        searchFolder: '$(System.DefaultWorkingDirectory)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    
+    #- task: VSTest@2
+    #  inputs:
+    #    testSelector: 'testAssemblies'
+    #    testAssemblyVer2: |
+    #      **\AdventureWorks.Tests.dll
+    #      !**\obj\**
+    #    searchFolder: '$(System.DefaultWorkingDirectory)'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
         projects: '**/AdventureWorks.Tests.csproj'
-        arguments: '--no-build --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/"'
+        arguments: ' --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/"'
+        nobuild: true
         publishTestResults: true
     - task: PublishCodeCoverageResults@1
       inputs:
         codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml'
-
+        summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+        failIfCoverageEmpty: true
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
