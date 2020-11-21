@@ -35,7 +35,6 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'buildArtifact'
-        publishLocation: 'Container'
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
@@ -55,4 +54,4 @@ stages:
         azureSubscription: 'Visual Studio Professional(dda2a232-c1b2-433a-a1e5-1d8086dd0e30)'
         appType: 'webApp'
         WebAppName: $(webAppName)
-        Package: '$(Build.ArtifactStagingDirectory)\*.zip'
+        Package: '$(Build.ArtifactStagingDirectory)\**\WebApp.zip'
