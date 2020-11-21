@@ -29,23 +29,23 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
         msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    - task: DotNetCoreCLI@2
-      displayName: 'Install Report Generator'
-      inputs:
-        command: custom
-        custom: tool
-        arguments: 'install --global dotnet-reportgenerator-globaltool'
+    #- task: DotNetCoreCLI@2
+    #  displayName: 'Install Report Generator'
+    #  inputs:
+    #    command: custom
+    #    custom: tool
+    #    arguments: 'install --global dotnet-reportgenerator-globaltool'
     - task: DotNetCoreCLI@2
       displayName: 'Run UnitTest'
       inputs:
         command: 'test'
         projects: '**/AdventureWorks.Tests.csproj'
-        arguments: ' --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/"'
+        arguments: ' --configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
         nobuild: true
         publishTestResults: true
-    - script: |
-          reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
-      displayName: 'Create Code Coverage Report'
+    #- script: |
+    #      reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+    #  displayName: 'Create Code Coverage Report'
     - task: PublishCodeCoverageResults@1
       displayName: 'Publih Code Coverage Report'
       inputs:
